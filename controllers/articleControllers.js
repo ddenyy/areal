@@ -23,15 +23,45 @@ class ArticleController {
         }
     }
 
-    async getOneArticle(req,res) {
-
+    async getOneArticle(req,res, next) {
+        try
+        {
+            const { articleId } = req.params;
+            const article = await Article.findOne({
+                where: {
+                    id: articleId
+                }
+            });
+            return res.json(article);
+        } catch (e)
+        {
+            next(new ApiError.badRequest(e.message));
+        }
     }
-    async updateArticle(req,res) {
-
+    async updateArticle(req,res, next) {
+        const { articleId } = req.params;
+        await Article.update({
+            where: {
+                id: articleId
+            }
+        }).then((updArticle) => {
+            return res.json(updArticle);
+        }).catch((err) => {
+            return next(new ApiError.badRequest(err.message));
+        })
     }
 
-    async deleteArticle(req,res) {
-
+    async deleteArticle(req,res, next) {
+        const { articleId } = req.params;
+        await Article.destroy({
+            where: {
+                id: articleId
+            }
+        }).then((delArticle)=> {
+            return res.json(delArticle);
+        }).catch((err) => {
+            return next(new ApiError.badRequest(err.message));
+        })
     }
 }
 
