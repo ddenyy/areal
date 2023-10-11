@@ -1,25 +1,25 @@
-const { Article } = require('../models/models');
+const { ArticlesModel } = require('../models/models');
+const ApiError = require('../error/ApiError')
 class ArticleController {
     async createArticle(req,res,next) {
         const { name, text } = req.body;
         try {
-            const article = await Article.create({name, text});
+            let article = await ArticlesModel.create({name,text});
             return res.json(article);
         } catch (e)
         {
-            next(new ApiError.badRequest(e.message));
+            next(ApiError.badRequest(e.message));
         }
-
 
     }
     async getArticle(req,res, next) {
         try {
-            const articles = await Article.findAll({});
+            const articles = await ArticlesModel.findAll({});
             return res.json(articles);
         }
         catch (e)
         {
-            next(new ApiError.badRequest(e.message));
+            next(ApiError.badRequest(e.message));
         }
     }
 
@@ -27,7 +27,7 @@ class ArticleController {
         try
         {
             const { articleId } = req.params;
-            const article = await Article.findOne({
+            const article = await ArticlesModel.findOne({
                 where: {
                     id: articleId
                 }
@@ -35,32 +35,32 @@ class ArticleController {
             return res.json(article);
         } catch (e)
         {
-            next(new ApiError.badRequest(e.message));
+            next(ApiError.badRequest(e.message));
         }
     }
     async updateArticle(req,res, next) {
         const { articleId } = req.params;
-        await Article.update({
+        await ArticlesModel.update({
             where: {
                 id: articleId
             }
         }).then((updArticle) => {
             return res.json(updArticle);
         }).catch((err) => {
-            return next(new ApiError.badRequest(err.message));
+            return next(ApiError.badRequest(err.message));
         })
     }
 
     async deleteArticle(req,res, next) {
         const { articleId } = req.params;
-        await Article.destroy({
+        await ArticlesModel.destroy({
             where: {
                 id: articleId
             }
         }).then((delArticle)=> {
             return res.json(delArticle);
         }).catch((err) => {
-            return next(new ApiError.badRequest(err.message));
+            return next(ApiError.badRequest(err.message));
         })
     }
 }

@@ -4,8 +4,9 @@ const { DataTypes} = require('sequelize');
 const ArticlesModel = sequelize.define('articles', {
     id: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
         autoIncrement: true,
+        primaryKey: true,
+        allowNull: false
     },
     name: {
         type: DataTypes.STRING,
